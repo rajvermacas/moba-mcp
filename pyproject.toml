@@ -1,0 +1,69 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "moba-mcp"
+version = "0.1.0"
+description = "MCP (Model Context Protocol) implementation for moba"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/yourusername/moba-mcp"
+repository = "https://github.com/yourusername/moba-mcp"
+documentation = "https://github.com/yourusername/moba-mcp#readme"
+keywords = ["mcp", "model-context-protocol", "ai", "llm"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+packages = [{include = "moba_mcp", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic = "^2.0.0"
+aiohttp = "^3.9.0"
+python-dotenv = "^1.0.0"
+fastmcp = "^2.11.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.0"
+pytest-cov = "^4.0"
+pytest-asyncio = "^0.21"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/yourusername/moba-mcp/issues"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--cov=src/moba_mcp",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+]
+
+[tool.coverage.run]
+source = ["src/moba_mcp"]
+omit = ["*/tests/*", "*/__pycache__/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if __name__ == .__main__.:",
+    "raise AssertionError",
+    "raise NotImplementedError",
+]

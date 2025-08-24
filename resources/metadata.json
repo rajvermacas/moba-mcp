@@ -1,0 +1,62 @@
+{
+  "server_name": "talk-2-tables-mcp",
+  "database_path": "test_data/sample.db",
+  "description": "Sample e-commerce database for demonstration purposes",
+  "business_use_cases": [
+    "Customer order analysis",
+    "Product inventory management",
+    "Sales reporting and analytics",
+    "User activity tracking",
+    "Revenue analysis by product category"
+  ],
+  "tables": {
+    "users": {
+      "description": "Customer user accounts",
+      "columns": [
+        "id",
+        "username",
+        "email",
+        "full_name",
+        "created_at",
+        "is_active"
+      ],
+      "row_count": 5
+    },
+    "products": {
+      "description": "Product catalog",
+      "columns": [
+        "id",
+        "name",
+        "description",
+        "price",
+        "stock_quantity",
+        "category",
+        "created_at"
+      ],
+      "row_count": 10
+    },
+    "orders": {
+      "description": "Customer orders",
+      "columns": [
+        "id",
+        "user_id",
+        "order_date",
+        "total_amount",
+        "status"
+      ],
+      "row_count": 4
+    },
+    "order_items": {
+      "description": "Individual items within orders",
+      "columns": [
+        "id",
+        "order_id",
+        "product_id",
+        "quantity",
+        "unit_price"
+      ],
+      "row_count": 6
+    }
+  },
+  "last_updated": "2025-08-24T07:24:10.544521"
+}

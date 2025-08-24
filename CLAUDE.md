@@ -1,0 +1,1 @@
+- Use context7 mcp tool extensively.
