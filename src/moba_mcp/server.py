@@ -14,7 +14,7 @@ from typing import Any, Dict, List
 from fastmcp import FastMCP, Context
 from pydantic import BaseModel, Field
 
-from .config import ServerConfig, load_config, setup_logging
+from .config import ServerConfig, setup_logging
 from .database import DatabaseError, DatabaseHandler
 
 logger = logging.getLogger(__name__)
@@ -429,7 +429,7 @@ def create_server(args: argparse.Namespace = None) -> Talk2TablesMCP:
         Configured Talk2TablesMCP server instance
     """
     # Load base configuration
-    config = load_config()
+    config = ServerConfig()
     
     # Override with command-line arguments if provided
     if args:

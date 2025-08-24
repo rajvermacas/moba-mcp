@@ -7,13 +7,21 @@ metadata locations, and server settings.
 import logging
 import os
 from pathlib import Path
-from typing import Optional
+from typing import Any, Dict, Optional
+from urllib.parse import urlparse
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import Field, field_validator, model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class ServerConfig(BaseModel):
+class ServerConfig(BaseSettings):
     """Configuration settings for the MCP server."""
+    
+    model_config = SettingsConfigDict(
+        env_file='.env',
+        case_sensitive=False,
+        extra='ignore'
+    )
     
     # Database configuration
     database_path: str = Field(
@@ -48,6 +56,25 @@ class ServerConfig(BaseModel):
         default=8000,
         description="Port number for the server"
     )
+    
+    @model_validator(mode='before')
+    @classmethod
+    def parse_mcp_server_url(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+        """Parse MCP_SERVER_URL if provided and set host/port."""
+        # Check both uppercase and lowercase due to case_sensitive=False
+        mcp_url = (values.get('MCP_SERVER_URL') or 
+                   values.get('mcp_server_url') or 
+                   os.getenv('MCP_SERVER_URL'))
+        if mcp_url:
+            try:
+                parsed = urlparse(mcp_url)
+                if parsed.hostname:
+                    values['host'] = parsed.hostname
+                if parsed.port:
+                    values['port'] = parsed.port
+            except Exception as e:
+                logging.warning(f"Failed to parse MCP_SERVER_URL '{mcp_url}': {e}")
+        return values
     
     transport: str = Field(
         default="stdio",
@@ -186,51 +213,6 @@ class ServerConfig(BaseModel):
         return base_path / metadata_path
 
 
-def load_config() -> ServerConfig:
-    """Load configuration from environment variables.
-    
-    Returns:
-        ServerConfig instance with values from environment or defaults
-    """
-    config_dict = {}
-    
-    # Map environment variables to config fields
-    env_mapping = {
-        "DATABASE_PATH": "database_path",
-        "METADATA_PATH": "metadata_path",
-        "SERVER_NAME": "server_name", 
-        "SERVER_VERSION": "server_version",
-        "HOST": "host",
-        "PORT": "port",
-        "TRANSPORT": "transport",
-        "STATELESS_HTTP": "stateless_http",
-        "ALLOW_CORS": "allow_cors",
-        "JSON_RESPONSE": "json_response",
-        "LOG_LEVEL": "log_level",
-        "LOG_FORMAT": "log_format",
-        "MAX_QUERY_LENGTH": "max_query_length",
-        "MAX_RESULT_ROWS": "max_result_rows",
-    }
-    
-    # Load values from environment
-    for env_var, config_field in env_mapping.items():
-        value = os.getenv(env_var)
-        if value is not None:
-            # Convert numeric values
-            if config_field in ["max_query_length", "max_result_rows", "port"]:
-                try:
-                    value = int(value)
-                except ValueError:
-                    logging.warning(f"Invalid numeric value for {env_var}: {value}")
-                    continue
-            
-            # Convert boolean values
-            elif config_field in ["stateless_http", "allow_cors", "json_response"]:
-                value = value.lower() in ("true", "1", "yes", "on")
-            
-            config_dict[config_field] = value
-    
-    return ServerConfig(**config_dict)
 
 
 def setup_logging(config: ServerConfig) -> None:

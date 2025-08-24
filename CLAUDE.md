@@ -1,1 +1,2 @@
-- Use context7 mcp tool extensively.
+- Use context7 mcp tool and sub agents extensively.
+- Use poetry to run python application.

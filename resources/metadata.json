@@ -1,62 +1,126 @@
 {
-  "server_name": "talk-2-tables-mcp",
+  "server_name": "metadata-mcp-server",
   "database_path": "test_data/sample.db",
-  "description": "Sample e-commerce database for demonstration purposes",
+  "description": "Metadata-only database for multi-MCP server testing (disjoint from main data)",
   "business_use_cases": [
-    "Customer order analysis",
-    "Product inventory management",
-    "Sales reporting and analytics",
-    "User activity tracking",
-    "Revenue analysis by product category"
+    "User behavior analytics",
+    "Product performance monitoring",
+    "Supply chain management",
+    "Logistics tracking",
+    "Financial reconciliation",
+    "Customer preference analysis",
+    "Cross-server data federation testing",
+    "Multi-source JOIN operations"
   ],
   "tables": {
-    "users": {
-      "description": "Customer user accounts",
-      "columns": [
-        "id",
-        "username",
-        "email",
-        "full_name",
-        "created_at",
-        "is_active"
-      ],
-      "row_count": 5
-    },
-    "products": {
-      "description": "Product catalog",
-      "columns": [
-        "id",
-        "name",
-        "description",
-        "price",
-        "stock_quantity",
-        "category",
-        "created_at"
-      ],
-      "row_count": 10
-    },
-    "orders": {
-      "description": "Customer orders",
+    "user_behavior_metadata": {
+      "description": "User behavioral analytics and engagement metrics",
       "columns": [
         "id",
         "user_id",
-        "order_date",
-        "total_amount",
-        "status"
+        "session_count",
+        "avg_session_duration_min",
+        "bounce_rate",
+        "device_type",
+        "browser",
+        "geo_location",
+        "referral_source",
+        "churn_risk_score",
+        "last_analyzed"
       ],
-      "row_count": 4
+      "row_count": 5,
+      "foreign_key_reference": "user_id -> users.id (in another MCP server)"
     },
-    "order_items": {
-      "description": "Individual items within orders",
+    "product_performance_metadata": {
+      "description": "Product performance metrics and market analysis",
+      "columns": [
+        "id",
+        "product_id",
+        "views_last_30d",
+        "conversion_rate",
+        "return_rate",
+        "avg_cart_abandonment",
+        "seasonal_demand_score",
+        "competitor_price",
+        "market_trend",
+        "last_analyzed"
+      ],
+      "row_count": 10,
+      "foreign_key_reference": "product_id -> products.id (in another MCP server)"
+    },
+    "order_logistics_metadata": {
+      "description": "Order shipping and logistics tracking",
       "columns": [
         "id",
         "order_id",
-        "product_id",
-        "quantity",
-        "unit_price"
+        "warehouse_id",
+        "picker_id",
+        "packing_time_min",
+        "shipping_carrier",
+        "tracking_url",
+        "delivery_attempts",
+        "carbon_footprint",
+        "insurance_amount"
       ],
-      "row_count": 6
+      "row_count": 4,
+      "foreign_key_reference": "order_id -> orders.id (in another MCP server)"
+    },
+    "user_preferences_metadata": {
+      "description": "User preferences and communication settings",
+      "columns": [
+        "id",
+        "user_id",
+        "notification_channel",
+        "language_preference",
+        "currency_preference",
+        "newsletter_subscribed",
+        "marketing_consent",
+        "theme_preference",
+        "accessibility_needs",
+        "updated_at"
+      ],
+      "row_count": 5,
+      "foreign_key_reference": "user_id -> users.id (in another MCP server)"
+    },
+    "product_supplier_metadata": {
+      "description": "Product supply chain and manufacturer information",
+      "columns": [
+        "id",
+        "product_id",
+        "manufacturer_name",
+        "manufacturer_country",
+        "import_duty_rate",
+        "certification_type",
+        "sustainability_score",
+        "lead_time_days",
+        "minimum_order_qty",
+        "last_updated"
+      ],
+      "row_count": 10,
+      "foreign_key_reference": "product_id -> products.id (in another MCP server)"
+    },
+    "order_financial_metadata": {
+      "description": "Order financial and payment processing details",
+      "columns": [
+        "id",
+        "order_id",
+        "payment_processor",
+        "transaction_fee",
+        "currency_used",
+        "exchange_rate",
+        "tax_jurisdiction",
+        "invoice_number",
+        "accounting_period",
+        "processed_at"
+      ],
+      "row_count": 4,
+      "foreign_key_reference": "order_id -> orders.id (in another MCP server)"
     }
   },
-  "last_updated": "2025-08-24T07:24:10.544521"
+  "notes": {
+    "data_separation": "This database contains ONLY metadata tables. Original tables (users, products, orders, order_items) exist in a separate MCP server.",
+    "join_capability": "Tables use matching IDs to enable JOIN operations across MCP servers.",
+    "testing_purpose": "Designed for testing multi-MCP server data federation and cross-server JOIN capabilities."
+  },
+  "last_updated": "2025-08-24T09:56:09.692682"
 }
