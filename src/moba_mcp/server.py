@@ -1,4 +1,4 @@
-"""Main MCP server implementation for Talk 2 Tables.
+"""Main MCP server implementation for Moba.
 
 This module implements the MCP server that exposes SQLite database query
 capabilities and resource discovery functionality.
@@ -51,8 +51,8 @@ class DatabaseMetadata(BaseModel):
     last_updated: str = Field(description="Last update timestamp")
 
 
-class Talk2TablesMCP:
-    """Main MCP server class for Talk 2 Tables."""
+class MobaMCP:
+    """Main MCP server class for Moba"""
     
     def __init__(self, config: ServerConfig):
         """Initialize the MCP server.
@@ -73,8 +73,8 @@ class Talk2TablesMCP:
     def _register_tools(self) -> None:
         """Register MCP tools."""
         
-        @self.mcp.tool()
-        async def execute_query(query: str, ctx: Context) -> QueryResult:
+        @self.mcp.tool(description="Execute a database query and return results from moba")
+        async def execute_query_moba(query: str, ctx: Context) -> QueryResult:
             """Execute a SELECT query on the database.
             
             Args:
@@ -123,7 +123,7 @@ class Talk2TablesMCP:
             except Exception as e:
                 error_msg = f"Unexpected error executing query: {e}"
                 await ctx.error(error_msg)
-                logger.exception("Unexpected error in execute_query")
+                logger.exception("Unexpected error in execute_query moba")
                 raise ValueError(error_msg)
     
     def _register_resources(self) -> None:
@@ -327,7 +327,7 @@ def parse_args() -> argparse.Namespace:
         Parsed command-line arguments
     """
     parser = argparse.ArgumentParser(
-        description="Talk 2 Tables MCP Server - SQLite database query server with MCP protocol",
+        description="Moba MCP Server - SQLite database query server with MCP protocol",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -398,11 +398,6 @@ Environment Variables:
         help="Use JSON responses instead of SSE streams"
     )
     
-    parser.add_argument(
-        "--no-cors",
-        action="store_true",
-        help="Disable CORS headers"
-    )
     
     # Server options
     parser.add_argument(
@@ -419,14 +414,14 @@ Environment Variables:
     return parser.parse_args()
 
 
-def create_server(args: argparse.Namespace = None) -> Talk2TablesMCP:
+def create_server(args: argparse.Namespace = None) -> MobaMCP:
     """Create and configure the MCP server.
     
     Args:
         args: Command-line arguments to override configuration
     
     Returns:
-        Configured Talk2TablesMCP server instance
+        Configured Moba server instance
     """
     # Load base configuration
     config = ServerConfig()
@@ -447,8 +442,6 @@ def create_server(args: argparse.Namespace = None) -> Talk2TablesMCP:
             config.stateless_http = True
         if args.json_response:
             config.json_response = True
-        if args.no_cors:
-            config.allow_cors = False
         if args.log_level:
             config.log_level = args.log_level
         if args.server_name:
@@ -458,7 +451,7 @@ def create_server(args: argparse.Namespace = None) -> Talk2TablesMCP:
     setup_logging(config)
     
     # Create server
-    server = Talk2TablesMCP(config)
+    server = MobaMCP(config)
     
     return server
 

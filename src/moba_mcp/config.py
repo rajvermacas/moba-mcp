@@ -1,4 +1,4 @@
-"""Configuration management for the Talk 2 Tables MCP server.
+"""Configuration management for the Moba MCP server.
 
 This module handles all configuration settings including database paths,
 metadata locations, and server settings.
@@ -37,7 +37,7 @@ class ServerConfig(BaseSettings):
     
     # Server configuration
     server_name: str = Field(
-        default="talk-2-tables-mcp",
+        default="moba-mcp",
         description="Name of the MCP server"
     )
     
@@ -84,11 +84,6 @@ class ServerConfig(BaseSettings):
     stateless_http: bool = Field(
         default=False,
         description="Enable stateless HTTP mode (no session persistence)"
-    )
-    
-    allow_cors: bool = Field(
-        default=True,
-        description="Enable CORS for browser clients"
     )
     
     json_response: bool = Field(
@@ -230,7 +225,7 @@ def setup_logging(config: ServerConfig) -> None:
     )
     
     # Set specific logger levels
-    logger = logging.getLogger("talk_2_tables_mcp")
+    logger = logging.getLogger("moba_mcp")
     logger.setLevel(getattr(logging, config.log_level))
     
     # Reduce verbosity of external libraries if needed

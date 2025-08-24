@@ -122,9 +122,8 @@ python -m moba_mcp.server --transport streamable-http --json-response --port 800
 | `--transport, -t` | Transport type (stdio/sse/streamable-http) | stdio |
 | `--stateless` | Enable stateless HTTP mode | False |
 | `--json-response` | Use JSON responses instead of SSE | False |
-| `--no-cors` | Disable CORS headers | False |
 | `--log-level` | Logging level (DEBUG/INFO/WARNING/ERROR) | INFO |
-| `--server-name` | Server name identifier | talk2tables-mcp |
+| `--server-name` | Server name identifier | moba-mcp |
 
 ### Quick Start with tmux (for background execution)
 

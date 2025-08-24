@@ -1,5 +1,5 @@
 {
-  "server_name": "metadata-mcp-server",
+  "server_name": "moba-mcp-server",
   "database_path": "test_data/sample.db",
   "description": "Metadata-only database for multi-MCP server testing (disjoint from main data)",
   "business_use_cases": [
